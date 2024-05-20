@@ -1,3 +1,5 @@
 main.db
 .pyc
 *.pyc
+*.dbsqlite3
+main.db
