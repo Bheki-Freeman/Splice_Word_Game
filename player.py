@@ -6,6 +6,7 @@
  
 import sqlite3
 from getpass import getpass
+from game import Game
 
 conn = sqlite3.connect('main.db')
 cur = conn.cursor()
@@ -55,6 +56,29 @@ class Player(object):
         sql = f"DELETE FROM player WHERE username='{self.username}' AND password='{del_pass}'"
         cur.execute(sql)
         conn.commit()
+    def menu(self):
+        line = '-'* 40
+        try:
+            print(f'{line}\n\t--- [PLAYER ACCOUNT] ---\n{line}\n')
+            action:int = int(input(f'Manage Account Details?\n\t1 --- Games Played\n\t2 --- Update Account\n\t3 --- Remove Account\n\t0 --- Exit\n\t[CHOICE]: '))
+            if action == 1:
+                self.get_games()
+            elif action == 2:
+                self.update()
+            elif action == 3:
+                self.delete_player_account()
+            elif action == 0:
+                exit(0)
+            else:
+                print(f'[WRONG INPUT] {action} : Please choose from the given list of Numbers!')
+                self.menu()
+        except (TypeError, ValueError) as er:
+            print(f'[ERROR]: Please type numbers or text where due!')
+            self.menu()
+    def update(self):
+        print('updating player details')
+    def get_games(self):
+        print('printing Games Details')
         
     def register(self) -> None:
         try:
@@ -70,7 +94,14 @@ class Player(object):
                 conn.commit()
                 return True                
             if create_user_data(self):
-                print('[PLAYER SUCCESSFULLY REGISTERED!]')
+                logon:str = input('[PLAYER SUCCESSFULLY REGISTERED!]\n\t[LOGIN] yes/no: ')
+                if logon.lower() == 'yes':
+                    self.login()
+                elif logon.lower() == 'no':
+                    print('[THANK YOU FOR REGISTERING WITH US!!]')
+                    exit(0) 
+                else:
+                    print('[WRONG CHOICE]')
             else:
                 print('[USER REGISTRATION FAILED!]')
                 
@@ -95,16 +126,18 @@ class Player(object):
                     self.take_user_name()
         except (TypeError, ValueError) as er:
             print(f'[ERROR]: {er}')
-    def login(self) -> object: #For now, we return void
+    def login(self) -> None: #For now, we return void
         try:
             user_name = input('[USERNAME]: ')
             user_pass = getpass('[PASSWORD]: ')
             if self.fetch_user(user_name, user_pass):
-                print('[ACCESS GRANTED]')
-                return self
+                print()
+                print('-'*40)
+                print('\t--- [ACCESS GRANTED] ---')
+                self.start_game()
             else:
-                print('[LOGIN FAILURE!]: Wrong Credentials')
-                have_account = ('[DONT HAVE AN ACCOUNT?] yes / no: ')
+                print('[ACCESS DENIED!]')
+                have_account:str = input('[DONT HAVE AN ACCOUNT?] yes / no: ')
                 if have_account.lower() == 'yes':
                     self.register()
                 else:
@@ -129,4 +162,19 @@ class Player(object):
             for row in result:
                 self.name, self.username, self.password = row 
             return True
+    def start_game(self):
+        line:str = '-'*40
+        game:Game = Game()
+        action:int = int(input(f'{line}\n-- Game Options --\n\t1 ---- New Game\n\t2 ---- Continue\n\t3 ---- Game settings\n\t4 ---- Player Account\n\t0 ---- Logout\n\t[CHOICE]: '))
+        if action == 1:
+            game.start()
+            self.menu()
+        elif action == 2:
+            game.resume()
+        elif action == 3:
+            game.settings()
+        elif action == 4:
+            self.menu()
+        else:
+            exit(0)
                 
