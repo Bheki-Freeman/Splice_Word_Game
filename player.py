@@ -5,6 +5,8 @@
 # The Game Statistics include (High Scores, Current Scores)
  
 import sqlite3
+from getpass import getpass
+
 conn = sqlite3.connect('main.db')
 cur = conn.cursor()
 
@@ -22,7 +24,7 @@ class Player():
         try:
             self.name = input('[NAME]: ')
             self.take_user_name()
-            self.password = input('[PASSWORD]: ')
+            self.password = getpass("[PASSWORD]: ")
             self.age = int(input('[AGE]: '))
             self.gender = input('[GENDER] as (M/F): ')
             self.phone = int(input('[PHONE] as (+268 76294516): '))            
@@ -44,8 +46,21 @@ class Player():
         if self.check_name(username): # Just to make sure that the username is unique
             self.username = username
         else:
-            print(f'{username} [ALREADY TAKEN]!')
-            self.take_user_name()
+            print(f'{username} [ALREADY TAKEN]!') # In this case we need to ask user if they want to login, or re-create username
+            log_in = input('[LOGIN WITH YOUR USER ACCOUNT?] (yes/no): ')
+            if log_in.lower() == 'yes':
+                self.login()
+            else:
+                self.take_user_name()
+    def login(self) -> None: #For now, we return void
+        user_name = input('[USERNAME]: ')
+        user_pass = getpass('[PASSWORD]: ')
+        if self.fetch_user(user_name, user_pass):
+            print('[LOGIN SUCCESSFUL]')
+        else:
+            print('[LOGIN FAILURE!]: Wrong Credentials')
+            self.login()
+            
     def check_name(self, username) -> bool:
         sql = f"SELECT * FROM player WHERE username='{username}'"
         result = cur.execute(sql).fetchall()
@@ -54,7 +69,7 @@ class Player():
         else:
             return False
         
-    def login(self, username, password) -> bool:
+    def fetch_user(self, username, password) -> bool:
         sql = f"SELECT name, username, password FROM player WHERE username='{username}' AND password='{password}'"
         result = cur.execute(sql).fetchall()
         if not result:
