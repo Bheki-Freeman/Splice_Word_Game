@@ -166,6 +166,7 @@ class Player(object):
         line:str = '-'*40
         game:Game = Game()
         action:int = int(input(f'{line}\n-- Game Options --\n\t1 ---- New Game\n\t2 ---- Continue\n\t3 ---- Game settings\n\t4 ---- Player Account\n\t0 ---- Logout\n\t[CHOICE]: '))
+        print()
         if action == 1:
             game.start()
             self.menu()

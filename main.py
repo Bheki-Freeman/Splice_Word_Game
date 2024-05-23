@@ -11,8 +11,9 @@ line = '*'*40
 def main_menu() -> None:
     try:
         player:Player = Player() #Just making sure that I get a real player object with the type annotations
-        print(f'{line}\n\t--- [WELCOME USER] ---\n{line}\n')
+        print(f'{line}\n\t--- [WELCOME USER] ---\n{line}')
         action:int = int(input(f'What are we doing today?\n\t1 --- Login\n\t2 --- Create Account\n\t0 --- Exit\n\t[CHOICE]: '))
+        print(f'{"-"*40}')
         if action == 1:
             player.login()
         elif action == 2:
