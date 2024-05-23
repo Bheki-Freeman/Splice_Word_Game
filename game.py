@@ -7,22 +7,20 @@ class Game():
     def game_loop(self):
         while(self.is_running):
             self.game()
-            lst.clear()
             
-    def game(self):
-        print('The alphabet letters:')
-        
-        print()
-        play = input('Choose a Letter from [A, B, C] or type .q to QUIT!: ') # This is not the real logic of our game, only for test purposes
+    def game(self): 
         create_list()
+        print(lst)    
+        play = input('[LIST and MATCHING LETTERS] as (1b) or .q to QUIT! : ') 
         if play != '.q':            
-            print(lst)
             print(f'You Chose {play}')
+            lst.clear()            
         else:
             self.stop()            
     def start(self) -> None:
         self.is_running = True
         print('Game Started!')
+        print('Choose matching ALPHABETS from the following lists')
         self.game_loop()
 
     def stop(self) -> None:

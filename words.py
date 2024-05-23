@@ -4,7 +4,7 @@ import random
 pure_alphabets = []
 random_alphabets = []
 
-for letter in range(ord('a'), ord('z')+1): 
+for letter in range(ord('A'), ord('Z')+1): 
     pure_alphabets.append(chr(letter)) # I just have to create alphabets first
 
 for word in range(0,len(pure_alphabets)):
@@ -20,7 +20,7 @@ def add_list(lst, random_alphabets) -> None: # add list into  list
         ps = rand_value
         if ps > 23:
             continue
-        psx = ps + 5
+        psx = ps + 4
         lst.append(random_alphabets[ps:psx:1])
     
 
